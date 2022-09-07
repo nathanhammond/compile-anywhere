@@ -13,13 +13,6 @@ on:
 jobs:
   compile:
     runs-on: ${{ inputs.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        arch: [amd64, arm64]
-    
-    env:
-      GOARCH: ${{ matrix.arch }}
 
     steps:
       - name: Check out code

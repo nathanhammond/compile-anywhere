@@ -1,0 +1,30 @@
+name: Continuous Deploy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  compile:
+    name: Kick off all compilation tasks.
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    uses: nathanhammond/compile-anywhere/.github/workflows/compile.yml@main
+      with:
+        os: ${{ matrix.os }}
+      secrets: inherit
+  
+  release:
+    name: Gather and release compiled artifacts.
+    needs: compile
+    runs-on: ${{ ubuntu-latest }}
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+          
+      - name: Display structure of downloaded files
+        run: ls -R
